@@ -1,0 +1,815 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ndayisaba Eric IT - Premium UI & Free Streaming Portal</title>
+    <!-- FontAwesome icons integration -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-dark: #0f172a;
+            --secondary-dark: #1e293b;
+            --accent-blue: #2563eb;
+            --accent-blue-hover: #1d4ed8;
+            --accent-teal: #0d9488;
+            --bg-light: #f1f5f9;
+            --card-white: #ffffff;
+            --text-dark: #0f172a;
+            --text-gray: #475569;
+            --border-light: #cbd5e1;
+            --success-green: #16a34a;
+            --error-red: #dc2626;
+            --warning-orange: #d97706;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-light);
+            color: var(--text-dark);
+            line-height: 1.6;
+        }
+
+        header {
+            background-color: var(--primary-dark);
+            color: white;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+            position: sticky;
+            top: 0;
+            z-index: 999;
+            border-bottom: 2px solid #334155;
+        }
+
+        header h1 {
+            font-size: 1.5rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #60a5fa, #2dd4bf);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .nav-controls {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        .nav-btn {
+            background-color: var(--secondary-dark);
+            color: #f1f5f9;
+            border: 1px solid #475569;
+            padding: 0.6rem 1.2rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.2s ease;
+        }
+
+        .nav-btn:hover {
+            background-color: #334155;
+            border-color: #64748b;
+            transform: translateY(-1px);
+        }
+
+        .nav-btn.primary {
+            background: linear-gradient(135deg, var(--accent-blue), #3b82f6);
+            color: white;
+            border: none;
+            box-shadow: 0 4px 12px rgba(37,99,235,0.2);
+        }
+
+        .nav-btn.logout {
+            background-color: #7f1d1d;
+            border: 1px solid #b91c1c;
+            color: #fca5a5;
+            display: none;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 2.5rem auto;
+            padding: 0 1.5rem;
+            min-height: calc(100vh - 450px);
+        }
+
+        .hero {
+            background: radial-gradient(circle at top left, #1e293b, #0f172a);
+            color: white;
+            padding: 3.5rem 2rem;
+            border-radius: 20px;
+            margin-bottom: 3rem;
+            text-align: center;
+            border: 1px solid #334155;
+        }
+
+        .hero h2 { font-size: 2.1rem; font-weight: 800; margin-bottom: 0.5rem; }
+        .hero p { color: #94a3b8; font-size: 1rem; }
+
+        .tabs-container {
+            display: flex;
+            justify-content: center;
+            gap: 0.75rem;
+            margin-bottom: 2.5rem;
+            flex-wrap: wrap;
+        }
+
+        .tab-link {
+            padding: 0.7rem 1.6rem;
+            background-color: var(--card-white);
+            border: 1px solid var(--border-light);
+            border-radius: 50px;
+            cursor: pointer;
+            font-weight: 600;
+            color: var(--text-gray);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.2s ease;
+        }
+
+        .tab-link.active {
+            background-color: var(--accent-blue);
+            color: white;
+            border-color: var(--accent-blue);
+            box-shadow: 0 4px 12px rgba(37,99,235,0.25);
+        }
+
+        #adminContainer { margin-bottom: 3rem; }
+        .admin-panel { background-color: var(--card-white); border: 2px solid var(--accent-blue); border-radius: 18px; padding: 2rem; }
+        .admin-section-block { background: #f8fafc; border: 1px solid var(--border-light); padding: 1.5rem; border-radius: 12px; margin-top: 1.5rem; }
+        .admin-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1.25rem; margin-bottom: 1.25rem; }
+        
+        .form-group { display: flex; flex-direction: column; gap: 0.5rem; }
+        .form-group label { font-size: 0.85rem; font-weight: 700; }
+        .form-group input, .form-group textarea, .form-group select { padding: 0.8rem 1rem; border: 1px solid var(--border-light); border-radius: 10px; font-size: 0.95rem; outline: none; }
+        .form-group input[type="file"] { padding: 0.6rem; background: #edf2f7; cursor: pointer; }
+
+        .memory-badge { font-size: 0.85rem; font-weight: 700; color: var(--text-gray); margin-top: 0.2rem; display: flex; align-items: center; gap: 6px; }
+        .btn-post { background: linear-gradient(135deg, var(--success-green), #22c55e); color: white; font-weight: 700; border: none; padding: 0.9rem 1.8rem; border-radius: 10px; cursor: pointer; display: inline-flex; align-items: center; gap: 8px; }
+
+        /* Resource Grid Layout */
+        .resource-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .resource-card {
+            background-color: var(--card-white);
+            border: 1px solid rgba(15,23,42,0.08);
+            border-radius: 16px;
+            padding: 1.5rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.02);
+        }
+
+        .resource-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 25px rgba(0,0,0,0.06);
+            border-color: rgba(37,99,235,0.15);
+        }
+
+        .resource-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .badge {
+            font-size: 0.72rem;
+            font-weight: 700;
+            padding: 0.35rem 0.85rem;
+            border-radius: 50px;
+            text-transform: uppercase;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .badge.tutorial { background-color: #eff6ff; color: #1d4ed8; }
+        .badge.songs { background-color: #faf5ff; color: #6b21a8; }
+        .badge.training { background-color: #f0fdf4; color: #166534; }
+        .badge.other { background-color: #f8fafc; color: #475569; }
+
+        .resource-card h4 { font-size: 1.15rem; font-weight: 700; color: var(--primary-dark); margin-bottom: 0.5rem; }
+        .resource-card p { font-size: 0.9rem; color: var(--text-gray); margin-bottom: 1.25rem; }
+
+        .action-row {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            margin-top: auto;
+        }
+
+        .btn-view-free {
+            background-color: #f1f5f9;
+            color: var(--text-dark);
+            font-weight: 600;
+            font-size: 0.85rem;
+            padding: 0.6rem 1rem;
+            border-radius: 8px;
+            border: 1px solid var(--border-light);
+            text-align: center;
+            cursor: pointer;
+            display: inline-flex;
+            justify-content: center;
+            align-items: center;
+            gap: 6px;
+            text-decoration: none;
+            transition: all 0.2s;
+        }
+
+        .btn-view-free:hover { background-color: #e2e8f0; }
+
+        .btn-download {
+            background: linear-gradient(135deg, var(--accent-blue), #3b82f6);
+            color: white;
+            font-weight: 700;
+            font-size: 0.88rem;
+            padding: 0.65rem 1rem;
+            border-radius: 8px;
+            cursor: pointer;
+            border: none;
+            text-align: center;
+            text-decoration: none;
+            display: inline-flex;
+            justify-content: center;
+            align-items: center;
+            gap: 6px;
+            transition: all 0.2s;
+        }
+
+        .btn-download:hover { background: #1d4ed8; }
+        .btn-card-delete { background: none; border: none; color: var(--error-red); cursor: pointer; font-weight: 700; font-size: 0.82rem; margin-top: 0.4rem; text-align: center; }
+
+        .preview-box-container {
+            margin-top: 0.75rem;
+            border-top: 1px dashed var(--border-light);
+            padding-top: 0.75rem;
+            display: none;
+        }
+
+        .preview-box-container.active { display: block; }
+        .preview-box-container video { width: 100%; border-radius: 8px; margin-bottom: 0.5rem; background: #000; }
+        .preview-box-container img { width: 100%; border-radius: 8px; margin-bottom: 0.5rem; object-fit: contain; max-height: 200px; border: 1px solid var(--border-light); }
+        .audio-player-wrapper { background: #f8fafc; padding: 0.5rem; border-radius: 8px; border: 1px solid var(--border-light); }
+
+        /* Modern Footer Styling with Developer Details */
+        footer {
+            background-color: var(--primary-dark);
+            color: white;
+            padding: 3rem 2rem 1.5rem 2rem;
+            margin-top: 5rem;
+            border-top: 4px solid var(--accent-blue);
+        }
+
+        .footer-grid {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2.5rem;
+            padding-bottom: 2rem;
+            border-bottom: 1px solid #334155;
+        }
+
+        .footer-brand h4 {
+            font-size: 1.3rem;
+            font-weight: 800;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, #60a5fa, #2dd4bf);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .footer-brand p {
+            color: #94a3b8;
+            font-size: 0.9rem;
+        }
+
+        .footer-dev h4 {
+            font-size: 1.1rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            color: #f1f5f9;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .dev-info-list {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 0.6rem;
+            font-size: 0.9rem;
+            color: #cbd5e1;
+        }
+
+        .dev-info-list li {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+        }
+
+        .dev-info-list i {
+            color: #60a5fa;
+            margin-top: 3px;
+            width: 16px;
+            text-align: center;
+        }
+
+        .footer-bottom {
+            max-width: 1200px;
+            margin: 1.5rem auto 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+            font-size: 0.85rem;
+            color: #64748b;
+        }
+
+        /* Auth Multi-Modal */
+        .modal-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(15, 23, 42, 0.6); backdrop-filter: blur(5px); display: flex; justify-content: center; align-items: center; z-index: 10000; visibility: hidden; opacity: 0; transition: all 0.3s ease; }
+        .modal-overlay.active { visibility: visible; opacity: 1; }
+        .modal-box { background: white; padding: 2.5rem; border-radius: 20px; width: 100%; max-width: 440px; position: relative; }
+        .modal-close { position: absolute; top: 20px; right: 20px; font-size: 1.5rem; cursor: pointer; color: var(--text-gray); }
+        .modal-box h3 { font-size: 1.6rem; margin-bottom: 0.5rem; text-align: center; font-weight: 800; }
+        .modal-box .sub { text-align: center; color: var(--text-gray); font-size: 0.9rem; margin-bottom: 1.5rem; }
+        .modal-tabs { display: flex; border-bottom: 2px solid var(--border-light); margin-bottom: 1.5rem; }
+        .modal-tab { flex: 1; text-align: center; padding: 0.6rem; cursor: pointer; font-weight: 700; color: var(--text-gray); }
+        .modal-tab.active { color: var(--accent-blue); border-bottom: 2px solid var(--accent-blue); margin-bottom: -2px; }
+        .modal-form { display: flex; flex-direction: column; gap: 1.25rem; }
+        .modal-form button { background: linear-gradient(135deg, var(--accent-blue), #3b82f6); color: white; border: none; padding: 0.85rem; font-weight: 700; border-radius: 10px; cursor: pointer; }
+        .hidden-form-block { display: none; }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1><i class="fa-solid fa-layer-group"></i> Ndayisaba Eric IT</h1>
+        <div class="nav-controls">
+            <span id="userBadge" style="color: #60a5fa; font-size: 0.95rem; font-weight: 700;"></span>
+            <button id="loginBtn" class="nav-btn" onclick="openAuthModal()"><i class="fa-solid fa-right-to-bracket"></i> Login / Sign Up</button>
+            <button id="logoutBtn" class="nav-btn logout" onclick="handleUserLogout()"><i class="fa-solid fa-power-off"></i> Logout</button>
+            <button id="adminBtn" class="nav-btn primary" onclick="handleAdminLoginGate()"><i class="fa-solid fa-user-gear"></i> Admin Panel</button>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="hero">
+            <h2>Premium Cloud Resource Dashboard</h2>
+            <p><i class="fa-solid fa-circle-info"></i> Gusoma ibitabo, kureba amavideo, amafoto n'indirimbo ni <strong>ubuntu burundu</strong>! Login isabwa gusa iyo ugiye gu-Downloading.</p>
+        </div>
+
+        <div class="tabs-container">
+            <button class="tab-link active" onclick="filterCategory('all', this)"><i class="fa-solid fa-border-all"></i> All Content</button>
+            <button class="tab-link" onclick="filterCategory('tutorial', this)"><i class="fa-solid fa-graduation-cap"></i> Tutorials</button>
+            <button class="tab-link" onclick="filterCategory('songs', this)"><i class="fa-solid fa-music"></i> Songs</button>
+            <button class="tab-link" onclick="filterCategory('training', this)"><i class="fa-solid fa-chalkboard-user"></i> Training</button>
+            <button class="tab-link" onclick="filterCategory('other', this)"><i class="fa-solid fa-folder-open"></i> Other</button>
+        </div>
+
+        <!-- Operator Console Area -->
+        <div id="adminContainer"></div>
+
+        <!-- Resources Viewer Grid -->
+        <div class="content-section">
+            <h3 id="sectionTitle" style="margin-bottom: 1.75rem; border-left: 5px solid var(--accent-blue); padding-left: 14px; font-weight: 800;"><i class="fa-solid fa-cloud-arrow-down"></i> All Available Resources</h3>
+            <div class="resource-grid" id="resourceGrid"></div>
+        </div>
+    </div>
+
+    <!-- Modern Footer Section with Developer Details -->
+    <footer>
+        <div class="footer-grid">
+            <div class="footer-brand">
+                <h4>Ndayisaba Eric IT</h4>
+                <p>Urubuga rwa mberere rwo gushyiraho madosiye, ibitabo, amavideo n'indirimbo mu buryo bugezweho bw'ikoranabuhanga n'umutekano ukomeye.</p>
+            </div>
+            <div class="footer-dev">
+                <h4><i class="fa-solid fa-code"></i> Developer Details</h4>
+                <ul class="dev-info-list">
+                    <li><i class="fa-solid fa-user-tie"></i> <span><strong>Name:</strong> NDAYISABA Eric</span></li>
+                    <li><i class="fa-solid fa-envelope"></i> <span><strong>Email:</strong> test@example.com</span></li>
+                    <li><i class="fa-solid fa-phone-volume"></i> <span><strong>Tel:</strong> +250732801964</span></li>
+                    <li><i class="fa-solid fa-location-dot"></i> <span><strong>Address:</strong> RWANDA, NGOMA, MUTENDERI, KIBARE, KABOMBO</span></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2026 Ndayisaba Eric IT. All Rights Reserved.</p>
+            <p>Designed with <i class="fa-solid fa-heart" style="color: var(--error-red)"></i> for Premium Engineering</p>
+        </div>
+    </footer>
+
+    <!-- Auth Multi-Modal -->
+    <div class="modal-overlay" id="authModal">
+        <div class="modal-box">
+            <span class="modal-close" onclick="closeAuthModal()">&times;</span>
+            <h3 id="modalTitle">Account Verification</h3>
+            <p class="sub" id="modalSub">Log in cyangwa ufungure profile kugira ngo ubashe gukuraho (Download) iyi file.</p>
+            
+            <div class="modal-tabs" id="modalTabsHeader">
+                <div class="modal-tab active" id="tabLogin" onclick="switchModalTab('login')">Sign In</div>
+                <div class="modal-tab" id="tabSignup" onclick="switchModalTab('signup')">Sign Up</div>
+            </div>
+
+            <!-- Login -->
+            <div id="loginFormBlock" class="modal-form">
+                <div class="form-group"><label><i class="fa-solid fa-envelope"></i> Email Address</label><input type="email" id="loginEmail" placeholder="name@example.com"></div>
+                <div class="form-group"><label><i class="fa-solid fa-lock"></i> Password</label><input type="password" id="loginPassword" placeholder="••••••••"></div>
+                <button onclick="handleUserLoginSubmit()">Log In & Unlock Download</button>
+            </div>
+
+            <!-- Signup -->
+            <div id="signupFormBlock" class="modal-form hidden-form-block">
+                <div class="form-group"><label><i class="fa-solid fa-user"></i> Full Name</label><input type="text" id="signupName" placeholder="Eric Ndayisaba"></div>
+                <div class="form-group"><label><i class="fa-solid fa-envelope"></i> Email Address</label><input type="email" id="signupEmail" placeholder="name@example.com"></div>
+                <div class="form-group"><label><i class="fa-solid fa-lock"></i> Create Password</label><input type="password" id="signupPassword" placeholder="Create secret password"></div>
+                <button onclick="handleUserSignupSubmit()">Create Profile</button>
+            </div>
+
+            <!-- Verification System View -->
+            <div id="verifyFormBlock" class="modal-form hidden-form-block">
+                <div style="background: #eff6ff; padding: 0.9rem; border-radius: 8px; font-size: 0.85rem; color: #1e4ed8; text-align: center; border: 1px solid #bfdbfe;">
+                    Verification code sent! (Demo is: <strong>123456</strong>)
+                </div>
+                <div class="form-group">
+                    <label><i class="fa-solid fa-shield-halved"></i> Enter 6-Digit Code</label>
+                    <input type="text" id="verificationCode" placeholder="123456" maxlength="6" style="text-align: center; letter-spacing: 6px; font-size: 1.3rem; font-weight: bold;">
+                </div>
+                <button onclick="handleVerificationSubmit()" style="background: var(--success-green);">Verify & Enable Download</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let adminUsername = localStorage.getItem('hub_adm_user') || 'ndayisaba';
+        let adminPassword = localStorage.getItem('hub_adm_pass') || 'Eric@147';
+
+        let registeredUsers = JSON.parse(localStorage.getItem('hub_users')) || {
+            'test@example.com': { name: 'Demo Student', pass: '123456', verified: true }
+        };
+
+        let currentSigningUpUser = null; 
+        let loggedInUser = JSON.parse(sessionStorage.getItem('current_user')) || null;
+        let isAdminLoggedIn = false;
+        let activeCategoryFilter = 'all';
+
+        const baselineHubData = [
+            { id: 1, title: "PLC Industrial Automation Standards (IEC 61131-3)", type: "training", size: "45 MB", desc: "Igitabo n'amashusho yigisha uburyo bwo gu-programma ama-PLC akokeshwa mu nganda.", isBook: true, fileUrl: "#" },
+            { id: 2, title: "iPhone 7 Flashing & Smart Recovery Guide", type: "tutorial", size: "120 MB", desc: "Gukora software n'amakosa ya iTunes (Error 2003, 0xE8000065) ukanze rimwe kuri 3uTools.", isVideo: true, videoUrl: "https://www.w3schools.com/html/mov_bbb.mp4", fileUrl: "#" },
+            { id: 3, title: "Arduino Advanced Keypad Logic Security Systems", type: "tutorial", size: "18 MB", desc: "Uburyo bwo kubaka password system ukoresheje simple variables mu mutekano w'inzu.", isBook: true, fileUrl: "#" },
+            { id: 4, title: "ESP8266 IoT Web Dashboard & LDR Sensor", type: "training", size: "22 MB", desc: "Amashusho yerekana uko wubaka Asynchronous Web Server yo gucana amatara kuri phone.", isVideo: true, videoUrl: "https://www.w3schools.com/html/movie.mp4", fileUrl: "#" },
+            { id: 5, title: "Someone You Loved - Dynamic Lyrics Project", type: "songs", size: "8.5 MB", desc: "Indirimbo irimo amagambo asohoka neza arisynchronije mu buryo bugezweho.", isAudio: true, audioUrl: "https://www.w3schools.com/html/horse.mp3", fileUrl: "#" },
+            { id: 6, title: "CCTV Installation & Advanced Network Cybersecurity", type: "other", size: "55 MB", desc: "Inyigisho zo gushyiraho amacamera y'umutekano no kuyarinda ibitero bya Ransomware.", isBook: true, fileUrl: "#" }
+        ];
+
+        let assets = JSON.parse(localStorage.getItem('eric_hub_data')) || baselineHubData;
+
+        function getIconForType(type) {
+            switch(type) {
+                case 'tutorial': return '<i class="fa-solid fa-graduation-cap"></i>';
+                case 'songs': return '<i class="fa-solid fa-music"></i>';
+                case 'training': return '<i class="fa-solid fa-chalkboard-user"></i>';
+                default: return '<i class="fa-solid fa-folder"></i>';
+            }
+        }
+
+        function displayAssets() {
+            const grid = document.getElementById('resourceGrid');
+            grid.innerHTML = '';
+            const filtered = activeCategoryFilter === 'all' ? assets : assets.filter(i => i.type === activeCategoryFilter);
+
+            filtered.forEach(item => {
+                const card = document.createElement('div');
+                card.className = 'resource-card';
+                card.id = `card-${item.id}`;
+                
+                let actionBtnHtml = '';
+                if(item.isVideo) {
+                    actionBtnHtml = `<button class="btn-view-free" onclick="togglePreview(${item.id}, 'video')"><i class="fa-solid fa-circle-play" style="color:var(--accent-blue)"></i> Play Video (Free)</button>`;
+                } else if(item.isAudio) {
+                    actionBtnHtml = `<button class="btn-view-free" onclick="togglePreview(${item.id}, 'audio')"><i class="fa-solid fa-volume-high" style="color:var(--accent-teal)"></i> Listen Song (Free)</button>`;
+                } else if(item.isImage) {
+                    actionBtnHtml = `<button class="btn-view-free" onclick="togglePreview(${item.id}, 'image')"><i class="fa-solid fa-image" style="color:var(--success-green)"></i> View Photo (Free)</button>`;
+                } else {
+                    actionBtnHtml = `<button class="btn-view-free" onclick="togglePreview(${item.id}, 'book')"><i class="fa-solid fa-book-open" style="color:var(--warning-orange)"></i> Read Book (Free)</button>`;
+                }
+
+                card.innerHTML = `
+                    <div>
+                        <div class="resource-meta">
+                            <span class="badge ${item.type}">${getIconForType(item.type)} ${item.type}</span>
+                            <span style="font-size:0.85rem; font-weight:700; color:var(--text-gray); background:#f1f5f9; padding:2px 8px; border-radius:6px;"><i class="fa-solid fa-database"></i> ${item.size}</span>
+                        </div>
+                        <h4>${item.title}</h4>
+                        <p>${item.desc}</p>
+                        <div class="preview-box-container" id="preview-${item.id}"></div>
+                    </div>
+                    <div class="action-row">
+                        ${actionBtnHtml}
+                        <button class="btn-download" onclick="handleDownloadTrigger('${item.fileUrl || '#'}', '${item.title}')"><i class="fa-solid fa-circle-down"></i> Download Asset</button>
+                        ${isAdminLoggedIn ? `<button class="btn-card-delete" onclick="deleteAsset(${item.id})"><i class="fa-solid fa-trash-can"></i> Remove Asset</button>` : ''}
+                    </div>
+                `;
+                grid.appendChild(card);
+            });
+
+            if (loggedInUser) {
+                document.getElementById('loginBtn').style.display = 'none';
+                document.getElementById('logoutBtn').style.display = 'flex';
+                document.getElementById('userBadge').innerHTML = `<i class="fa-solid fa-circle-user"></i> ${loggedInUser.name}`;
+            } else {
+                document.getElementById('loginBtn').style.display = 'flex';
+                document.getElementById('logoutBtn').style.display = 'none';
+                document.getElementById('userBadge').innerText = '';
+            }
+        }
+
+        function togglePreview(id, type) {
+            const previewContainer = document.getElementById(`preview-${id}`);
+            const assetItem = assets.find(a => a.id === id);
+
+            if(previewContainer.classList.contains('active')) {
+                previewContainer.innerHTML = '';
+                previewContainer.classList.remove('active');
+                return;
+            }
+
+            // Close other open previews first for clean UI
+            document.querySelectorAll('.preview-box-container').forEach(el => { el.innerHTML = ''; el.classList.remove('active'); });
+
+            previewContainer.classList.add('active');
+            if(type === 'video') {
+                previewContainer.innerHTML = `
+                    <video controls autoplay muted>
+                        <source src="${assetItem.videoUrl || 'https://www.w3schools.com/html/mov_bbb.mp4'}" type="video/mp4">
+                    </video>
+                `;
+            } else if(type === 'audio') {
+                previewContainer.innerHTML = `
+                    <div class="audio-player-wrapper">
+                        <audio controls autoplay style="width:100%">
+                            <source src="${assetItem.audioUrl || 'https://www.w3schools.com/html/horse.mp3'}" type="audio/mpeg">
+                        </audio>
+                    </div>
+                `;
+            } else if(type === 'image') {
+                previewContainer.innerHTML = `
+                    <img src="${assetItem.imageUrl}" alt="Preview Asset">
+                `;
+            } else {
+                previewContainer.innerHTML = `
+                    <div style="background:#fffdec; border:1px solid #fde68a; padding:1rem; border-radius:8px; font-size:0.88rem; color:#b45309;">
+                        <h4><i class="fa-solid fa-file-pdf"></i> Reading: ${assetItem.title}</h4>
+                        <p style="margin-top:5px; font-size:0.82rem; color:var(--text-gray)">Ubu uri gusoma ibiri muri iyi file/fayile nta kiguzi...</p>
+                    </div>
+                `;
+            }
+        }
+
+        function handleDownloadTrigger(fileUrl, title) {
+            let userHasAccess = (loggedInUser !== null || isAdminLoggedIn === true);
+            
+            if (userHasAccess) {
+                if(fileUrl === '#') {
+                    alert("Genzura: Iyi ni demo asset. Niba ari file wishyiriyeho uka-uploader unyuze kuri Admin panel, iraza gu-downloada neza.");
+                    return;
+                }
+                const link = document.createElement('a');
+                link.href = fileUrl;
+                link.download = title;
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+            } else {
+                alert("🔒 Live Security Gate: Gukuraho (Download) iyi file bisaba kuba ufite konti. Nyamuneka banza u-Login cyangwa u-Sign Up!");
+                openAuthModal();
+            }
+        }
+
+        function filterCategory(cat, btn) {
+            activeCategoryFilter = cat;
+            document.querySelectorAll('.tab-link').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            displayAssets();
+        }
+
+        // --- AUTH LOGIC ---
+        function openAuthModal() { document.getElementById('authModal').classList.add('active'); switchModalTab('login'); }
+        function closeAuthModal() { document.getElementById('authModal').classList.remove('active'); }
+
+        function switchModalTab(type) {
+            document.getElementById('modalTabsHeader').style.display = 'flex';
+            document.getElementById('verifyFormBlock').style.display = 'none';
+            if (type === 'login') {
+                document.getElementById('tabLogin').classList.add('active'); document.getElementById('tabSignup').classList.remove('active');
+                document.getElementById('loginFormBlock').style.display = 'flex'; document.getElementById('signupFormBlock').style.display = 'none';
+            } else {
+                document.getElementById('tabSignup').classList.add('active'); document.getElementById('tabLogin').classList.remove('active');
+                document.getElementById('signupFormBlock').style.display = 'flex'; document.getElementById('loginFormBlock').style.display = 'none';
+            }
+        }
+
+        function handleUserLoginSubmit() {
+            const email = document.getElementById('loginEmail').value.trim();
+            const pass = document.getElementById('loginPassword').value;
+            if (registeredUsers[email] && registeredUsers[email].pass === pass) { executeUserLoginSuccess(email); } 
+            else { alert("Email cyangwa Password saryo!"); }
+        }
+
+        function handleUserSignupSubmit() {
+            const name = document.getElementById('signupName').value.trim();
+            const email = document.getElementById('signupEmail').value.trim();
+            const pass = document.getElementById('signupPassword').value;
+
+            if(!name || !email || !pass) { alert("Uzuza neza amakuru yose!"); return; }
+            if (registeredUsers[email]) { alert("Iyi Email isanzwe ifite account."); return; }
+
+            currentSigningUpUser = { name, email, pass, verified: false };
+            document.getElementById('modalTabsHeader').style.display = 'none';
+            document.getElementById('loginFormBlock').style.display = 'none';
+            document.getElementById('signupFormBlock').style.display = 'none';
+            document.getElementById('verifyFormBlock').style.display = 'flex';
+        }
+
+        function handleVerificationSubmit() {
+            const code = document.getElementById('verificationCode').value.trim();
+            if(code === "123456") {
+                registeredUsers[currentSigningUpUser.email] = { name: currentSigningUpUser.name, pass: currentSigningUpUser.pass, verified: true };
+                localStorage.setItem('hub_users', JSON.stringify(registeredUsers));
+                executeUserLoginSuccess(currentSigningUpUser.email);
+            } else { alert("Verification Code saryo!"); }
+        }
+
+        function executeUserLoginSuccess(email) {
+            loggedInUser = registeredUsers[email];
+            sessionStorage.setItem('current_user', JSON.stringify(loggedInUser));
+            closeAuthModal(); displayAssets();
+            alert(`Ufunguye neza! Noneho ushobora gu-download-inga fayile zose ukanze rimwe.`);
+        }
+
+        function handleUserLogout() {
+            loggedInUser = null; sessionStorage.removeItem('current_user');
+            displayAssets();
+        }
+
+        // --- CONSOLE OPERATIONS ---
+        function handleAdminLoginGate() {
+            if (!isAdminLoggedIn) {
+                let user = prompt("Shyiramo Admin Username:");
+                if (user === adminUsername) {
+                    let pass = prompt("Shyiramo Admin Password:");
+                    if (pass === adminPassword) {
+                        isAdminLoggedIn = true;
+                        injectAdminPanelHTML();
+                        document.getElementById('adminBtn').innerHTML = '<i class="fa-solid fa-rectangle-xmark"></i> Exit Admin Mode';
+                        displayAssets();
+                    } else { alert("Password ntabwo ari yo!"); }
+                } else { alert("Username ntabwo izwi!"); }
+            } else {
+                isAdminLoggedIn = false;
+                document.getElementById('adminContainer').innerHTML = '';
+                document.getElementById('adminBtn').innerHTML = '<i class="fa-solid fa-user-gear"></i> Admin Panel';
+                displayAssets();
+            }
+        }
+
+        function injectAdminPanelHTML() {
+            document.getElementById('adminContainer').innerHTML = `
+                <div class="admin-panel">
+                    <h3><i class="fa-solid fa-user-shield" style="color:var(--accent-blue)"></i> Operator Console: Active (${adminUsername})</h3>
+                    <div class="admin-section-block">
+                        <h4 style="color:var(--accent-blue); margin-bottom:1rem;"><i class="fa-solid fa-file-circle-plus"></i> Upload & Publish New Asset File From Computer</h4>
+                        <div class="admin-grid">
+                            <div class="form-group">
+                                <label><i class="fa-solid fa-pen-nib"></i> Resource Custom Title</label>
+                                <input type="text" id="resTitle" placeholder="e.g., Electronic Maintenance Guide">
+                            </div>
+                            <div class="form-group">
+                                <label><i class="fa-solid fa-tags"></i> Category Type</label>
+                                <select id="resType">
+                                    <option value="tutorial">Tutorials</option>
+                                    <option value="songs">Songs (Indirimbo)</option>
+                                    <option value="training">Training</option>
+                                    <option value="other">Other Assets</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label><i class="fa-solid fa-hard-drive"></i> Choose File (Auto Format Scanner)</label>
+                                <input type="file" id="resFileField" onchange="trackMemorySize(this)">
+                                <div id="sizeDetectorFeedback" class="memory-badge"><i class="fa-solid fa-circle-notch fa-spin"></i> Waiting for file...</div>
+                            </div>
+                        </div>
+                        <div class="form-group" style="margin-bottom:1.25rem;"><label><i class="fa-solid fa-align-left"></i> Asset Description</label><textarea id="resDesc" rows="2" placeholder="Write detailed instructions here..."></textarea></div>
+                        <button class="btn-post" onclick="createNewResourceFromFile()"><i class="fa-solid fa-cloud-arrow-up"></i> Upload & Publish File</button>
+                    </div>
+                </div>
+            `;
+        }
+
+        function trackMemorySize(inputElement) {
+            const feedback = document.getElementById('sizeDetectorFeedback');
+            if (inputElement.files.length > 0) {
+                const file = inputElement.files[0];
+                let formattedSize = (file.size >= 1024 * 1024) 
+                    ? (file.size / (1024 * 1024)).toFixed(1) + " MB" 
+                    : (file.size / 1024).toFixed(1) + " KB";
+                
+                feedback.innerHTML = `<i class="fa-solid fa-circle-check" style="color:var(--success-green)"></i> Format: <strong>${file.type || 'Unknown'}</strong> (${formattedSize})`;
+                feedback.style.color = "var(--success-green)";
+            } else {
+                feedback.innerHTML = '<i class="fa-solid fa-circle-notch fa-spin"></i> Waiting for file...';
+                feedback.style.color = "var(--text-gray)";
+            }
+        }
+
+        function createNewResourceFromFile() {
+            const title = document.getElementById('resTitle').value.trim();
+            const type = document.getElementById('resType').value;
+            const desc = document.getElementById('resDesc').value.trim();
+            const fileInput = document.getElementById('resFileField');
+
+            if (!title || !desc || fileInput.files.length === 0) { 
+                alert("Nyamuneka uzuza amakuru yose neza!"); 
+                return; 
+            }
+
+            const selectedFile = fileInput.files[0];
+            let calculatedSize = (selectedFile.size >= 1024 * 1024)
+                ? (selectedFile.size / (1024 * 1024)).toFixed(1) + " MB"
+                : (selectedFile.size / 1024).toFixed(1) + " KB";
+
+            // Gukora Local Object URL yo guhita yerekana file ako kanya kuri browser
+            const fileBlobUrl = URL.createObjectURL(selectedFile);
+
+            // AUTO DETECTION LOGIC FOR FILE FORMATS
+            let isVid = selectedFile.type.includes('video') || selectedFile.name.endsWith('.mp4') || selectedFile.name.endsWith('.mkv');
+            let isAud = selectedFile.type.includes('audio') || selectedFile.name.endsWith('.mp3') || selectedFile.name.endsWith('.wav') || selectedFile.name.endsWith('.m4a');
+            let isImg = selectedFile.type.includes('image') || selectedFile.name.endsWith('.jpg') || selectedFile.name.endsWith('.jpeg') || selectedFile.name.endsWith('.png') || selectedFile.name.endsWith('.gif');
+            let isBok = !isVid && !isAud && !isImg; // Ibindi byose bikaba document/kitabo
+
+            assets.unshift({
+                id: Date.now(),
+                title: title,
+                type: type,
+                size: calculatedSize,
+                desc: desc,
+                isVideo: isVid,
+                isAudio: isAud,
+                isImage: isImg,
+                isBook: isBok,
+                videoUrl: isVid ? fileBlobUrl : null,
+                audioUrl: isAud ? fileBlobUrl : null,
+                imageUrl: isImg ? fileBlobUrl : null,
+                fileUrl: fileBlobUrl
+            });
+
+            // Kubika muri LocalStorage (Nta gushyiramo blobs nini cyane kugira ngo isite idatinda)
+            localStorage.setItem('eric_hub_data', JSON.stringify(assets.map(a => ({
+                id: a.id, title: a.title, type: a.type, size: a.size, desc: a.desc,
+                isVideo: a.isVideo, isAudio: a.isAudio, isImage: a.isImage, isBook: a.isBook,
+                fileUrl: '#', videoUrl: null, audioUrl: null, imageUrl: null
+            })))); 
+            
+            displayAssets();
+            injectAdminPanelHTML();
+            alert(`Urupapuro rwahise rwakira dosiye yawe nka format yayo bwite: "${selectedFile.name}"!`);
+        }
+
+        function deleteAsset(id) {
+            if (confirm("Gusiba iyi dosiye burundu?")) {
+                assets = assets.filter(a => a.id !== id);
+                displayAssets();
+            }
+        }
+
+        displayAssets();
+    </script>
+</body>
+</html>
